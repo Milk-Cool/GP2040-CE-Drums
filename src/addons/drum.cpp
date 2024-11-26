@@ -62,9 +62,9 @@ void DrumAddon::process()
 	if(isValidPin(cfg.donRight.pin)) {
 		uint16_t readDonRight = readPin(cfg.donRight.pin);
 		if(readDonRight > cfg.donRight.thresh)
-				gamepad->state.dpad |= GAMEPAD_MASK_B2;
+				gamepad->state.buttons |= GAMEPAD_MASK_B2;
 		if(readDonRight > cfg.donRight.threshForce)
-				gamepad->state.buttons |= GAMEPAD_MASK_RIGHT;
+				gamepad->state.dpad |= GAMEPAD_MASK_RIGHT;
 	}
 
 	if(isValidPin(cfg.kaLeft.pin)) {

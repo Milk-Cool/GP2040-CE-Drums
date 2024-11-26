@@ -11,6 +11,7 @@ import { AppContext } from '../Contexts/AppContext';
 
 import WebApi from '../Services/WebApi';
 import Analog, { analogScheme, analogState } from '../Addons/Analog';
+import Drum, { drumScheme, drumState } from '../Addons/Drum';
 import Analog1256, {
 	analog1256Scheme,
 	analog1256State,
@@ -62,6 +63,7 @@ import ReactiveLED, {
 
 const schema = yup.object().shape({
 	...analogScheme,
+	...drumScheme,
 	...analog1256Scheme,
 	...bootselScheme,
 	...onBoardLedScheme,
@@ -86,6 +88,7 @@ const schema = yup.object().shape({
 
 const defaultValues = {
 	...analogState,
+	...drumState,
 	...analog1256State,
 	...bootselState,
 	...onBoardLedState,
@@ -113,6 +116,7 @@ const ADDONS = [
 	Bootsel,
 	OnBoardLed,
 	Analog,
+	Drum,
 	Turbo,
 	Reverse,
 	I2CAnalog1219,

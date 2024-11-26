@@ -1217,7 +1217,7 @@ std::string getKeyMappings()
     writeDoc(doc, "E10", keyboardMapping.keyButtonE10);
     writeDoc(doc, "E11", keyboardMapping.keyButtonE11);
     writeDoc(doc, "E12", keyboardMapping.keyButtonE12);
-    
+
     return serialize_json(doc);
 }
 
@@ -1463,6 +1463,21 @@ std::string setAddonOptions()
     docToValue(analogOptions.smoothing_factor, doc, "smoothing_factor");
     docToValue(analogOptions.analog_error, doc, "analog_error");
     docToValue(analogOptions.enabled, doc, "AnalogInputEnabled");
+
+    DrumOptions& drumOptions = Storage::getInstance().getAddonOptions().drumOptions;
+    docToPin(drumOptions.donLeftPin, doc, "drumDonLeftPin");
+    docToValue(drumOptions.donLeftThresh, doc, "drumDonLeftThresh");
+    docToValue(drumOptions.donLeftThreshForce, doc, "drumDonLeftThreshForce");
+    docToPin(drumOptions.donRightPin, doc, "drumDonRightPin");
+    docToValue(drumOptions.donRightThresh, doc, "drumDonRightThresh");
+    docToValue(drumOptions.donRightThreshForce, doc, "drumDonRightThreshForce");
+    docToPin(drumOptions.kaLeftPin, doc, "drumKaLeftPin");
+    docToValue(drumOptions.kaLeftThresh, doc, "drumKaLeftThresh");
+    docToValue(drumOptions.kaLeftThreshForce, doc, "drumKaLeftThreshForce");
+    docToPin(drumOptions.kaRightPin, doc, "drumKaRightPin");
+    docToValue(drumOptions.kaRightThresh, doc, "drumKaRightThresh");
+    docToValue(drumOptions.kaRightThreshForce, doc, "drumKaRightThreshForce");
+    docToValue(drumOptions.enabled, doc, "DrumEnabled");
 
     BootselButtonOptions& bootselButtonOptions = Storage::getInstance().getAddonOptions().bootselButtonOptions;
     docToValue(bootselButtonOptions.buttonMap, doc, "bootselButtonMap");
@@ -1882,6 +1897,21 @@ std::string getAddonOptions()
     writeDoc(doc, "smoothing_factor", analogOptions.smoothing_factor);
     writeDoc(doc, "analog_error", analogOptions.analog_error);
     writeDoc(doc, "AnalogInputEnabled", analogOptions.enabled);
+
+    const DrumOptions& drumOptions = Storage::getInstance().getAddonOptions().drumOptions;
+    writeDoc(doc, "drumDonLeftPin", cleanPin(drumOptions.donLeftPin));
+    writeDoc(doc, "drumDonLeftThresh", drumOptions.donLeftThresh);
+    writeDoc(doc, "drumDonLeftThreshForce", drumOptions.donLeftThreshForce);
+    writeDoc(doc, "drumDonRightPin", cleanPin(drumOptions.donRightPin));
+    writeDoc(doc, "drumDonRightThresh", drumOptions.donRightThresh);
+    writeDoc(doc, "drumDonRightThreshForce", drumOptions.donRightThreshForce);
+    writeDoc(doc, "drumKaLeftPin", cleanPin(drumOptions.kaLeftPin));
+    writeDoc(doc, "drumKaLeftThresh", drumOptions.kaLeftThresh);
+    writeDoc(doc, "drumKaLeftThreshForce", drumOptions.kaLeftThreshForce);
+    writeDoc(doc, "drumKaRightPin", cleanPin(drumOptions.kaRightPin));
+    writeDoc(doc, "drumKaRightThresh", drumOptions.kaRightThresh);
+    writeDoc(doc, "drumKaRightThreshForce", drumOptions.kaRightThreshForce);
+    writeDoc(doc, "DrumEnabled", drumOptions.enabled);
 
     const BootselButtonOptions& bootselButtonOptions = Storage::getInstance().getAddonOptions().bootselButtonOptions;
     writeDoc(doc, "bootselButtonMap", bootselButtonOptions.buttonMap);
