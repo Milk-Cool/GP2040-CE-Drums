@@ -16,6 +16,7 @@
 #include "addons/analog.h"
 #include "addons/bootsel_button.h"
 #include "addons/focus_mode.h"
+#include "addons/drum.h"
 #include "addons/dualdirectional.h"
 #include "addons/tilt.h"
 #include "addons/keyboard_host.h"
@@ -69,7 +70,7 @@ void GP2040::setup() {
 
 	// Setup Gamepad
 	gamepad->setup();
-	
+
 	// now we can load the latest configured profile, which will map the
 	// new set of GPIOs to use...
     this->initializeStandardGpio();
@@ -95,6 +96,7 @@ void GP2040::setup() {
 	addons.LoadUSBAddon(new GamepadUSBHostAddon(), CORE0_INPUT);
 	addons.LoadAddon(new AnalogInput(), CORE0_INPUT);
 	addons.LoadAddon(new BootselButtonAddon(), CORE0_INPUT);
+	addons.LoadAddon(new DrumAddon(), CORE0_INPUT);
 	addons.LoadAddon(new DualDirectionalInput(), CORE0_INPUT);
 	addons.LoadAddon(new FocusModeAddon(), CORE0_INPUT);
 	addons.LoadAddon(new I2CAnalog1219Input(), CORE0_INPUT);
@@ -178,7 +180,7 @@ void GP2040::setup() {
 	DriverManager::getInstance().setup(inputMode);
 
 	// Save the changed input mode
-	if (inputMode != gamepad->getOptions().inputMode) {	
+	if (inputMode != gamepad->getOptions().inputMode) {
 		gamepad->setInputMode(inputMode);
 		// save to match user expectations on choosing mode at boot, and this is
 		// before USB host will be used so we can force it to ignore the check
@@ -263,16 +265,16 @@ void GP2040::run() {
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 	Gamepad * processedGamepad = Storage::getInstance().GetProcessedGamepad();
 	bool configMode = Storage::getInstance().GetConfigMode();
-    
+
     // Start the TinyUSB Device functionality
     tud_init(TUD_OPT_RHPORT);
-    
+
 	while (1) { // LOOP
 		this->getReinitGamepad(gamepad);
 
 		// Do any queued saves in StorageManager
 		Storage::getInstance().performEnqueuedSaves();
-		
+
 		// Debounce
 		debounceGpioGetAll();
 		// Read Gamepad
@@ -280,7 +282,7 @@ void GP2040::run() {
 
 		// Config Loop (Web-Config does not require gamepad)
 		if (configMode == true) {
-			
+
 			ConfigManager::getInstance().loop();
 			rebootHotkeys.process(gamepad, configMode);
 			continue;
@@ -294,7 +296,7 @@ void GP2040::run() {
 
 		gamepad->hotkey(); 	// check for MPGS hotkeys
 		rebootHotkeys.process(gamepad, configMode);
-		
+
 		gamepad->process(); // process through MPGS
 
 		// (Post) Process for add-ons
@@ -305,10 +307,10 @@ void GP2040::run() {
 
 		// Process Input Driver
 		inputDriver->process(gamepad);
-		
+
 		// Process USB Report Addons
 		addons.ProcessAddons(ADDON_PROCESS::CORE0_USBREPORT);
-		
+
 		tud_task(); // TinyUSB Task update
 	}
 }
@@ -351,13 +353,13 @@ GP2040::BootAction GP2040::getBootAction() {
 				// Determine boot action based on gamepad state during boot
 				Gamepad * gamepad = Storage::getInstance().GetGamepad();
 				Gamepad * processedGamepad = Storage::getInstance().GetProcessedGamepad();
-				
+
 				debounceGpioGetAll();
 				gamepad->read();
 
 				// Pre-Process add-ons for MPGS
 				addons.PreprocessAddons(ADDON_PROCESS::CORE0_INPUT);
-				
+
 				gamepad->process(); // process through MPGS
 
 				// (Post) Process for add-ons
@@ -381,33 +383,33 @@ GP2040::BootAction GP2040::getBootAction() {
                     if (!modeSwitchLocked) {
                         if (auto search = bootActions.find(gamepad->state.buttons); search != bootActions.end()) {
                             switch (search->second) {
-                                case INPUT_MODE_XINPUT: 
+                                case INPUT_MODE_XINPUT:
                                     return BootAction::SET_INPUT_MODE_XINPUT;
-                                case INPUT_MODE_SWITCH: 
+                                case INPUT_MODE_SWITCH:
                                     return BootAction::SET_INPUT_MODE_SWITCH;
-                                case INPUT_MODE_KEYBOARD: 
+                                case INPUT_MODE_KEYBOARD:
                                     return BootAction::SET_INPUT_MODE_KEYBOARD;
                                 case INPUT_MODE_GENERIC:
                                     return BootAction::SET_INPUT_MODE_GENERIC;
                                 case INPUT_MODE_PS3:
                                     return BootAction::SET_INPUT_MODE_PS3;
-                                case INPUT_MODE_PS4: 
+                                case INPUT_MODE_PS4:
                                     return BootAction::SET_INPUT_MODE_PS4;
-                                case INPUT_MODE_PS5: 
+                                case INPUT_MODE_PS5:
                                     return BootAction::SET_INPUT_MODE_PS5;
-                                case INPUT_MODE_NEOGEO: 
+                                case INPUT_MODE_NEOGEO:
                                     return BootAction::SET_INPUT_MODE_NEOGEO;
-                                case INPUT_MODE_MDMINI: 
+                                case INPUT_MODE_MDMINI:
                                     return BootAction::SET_INPUT_MODE_MDMINI;
-                                case INPUT_MODE_PCEMINI: 
+                                case INPUT_MODE_PCEMINI:
                                     return BootAction::SET_INPUT_MODE_PCEMINI;
-                                case INPUT_MODE_EGRET: 
+                                case INPUT_MODE_EGRET:
                                     return BootAction::SET_INPUT_MODE_EGRET;
-                                case INPUT_MODE_ASTRO: 
+                                case INPUT_MODE_ASTRO:
                                     return BootAction::SET_INPUT_MODE_ASTRO;
-                                case INPUT_MODE_PSCLASSIC: 
+                                case INPUT_MODE_PSCLASSIC:
                                     return BootAction::SET_INPUT_MODE_PSCLASSIC;
-                                case INPUT_MODE_XBOXORIGINAL: 
+                                case INPUT_MODE_XBOXORIGINAL:
                                     return BootAction::SET_INPUT_MODE_XBOXORIGINAL;
                                 case INPUT_MODE_XBONE:
                                     return BootAction::SET_INPUT_MODE_XBONE;

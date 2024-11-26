@@ -14,6 +14,7 @@
 #include "addons/board_led.h"
 #include "addons/bootsel_button.h"
 #include "addons/buzzerspeaker.h"
+#include "addons/drum.h"
 #include "addons/dualdirectional.h"
 #include "addons/tilt.h"
 #include "addons/focus_mode.h"
@@ -545,6 +546,17 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
     INIT_UNSET_PROPERTY(config.addonOptions.analogOptions, smoothing_factor, !!SMOOTHING_FACTOR);
     INIT_UNSET_PROPERTY(config.addonOptions.analogOptions, analog_error, ANALOG_ERROR);
 
+		// addonOptions.drumOptions
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, enabled, DRUM_ENABLED);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, donLeftPin, DON_LEFT_PIN);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, donRightPin, DON_RIGHT_PIN);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaLeftPin, KA_LEFT_PIN);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaRightPin, KA_RIGHT_PIN);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, donLeftThresh, DON_LEFT_THRESH);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, donRightThresh, DON_RIGHT_THRESH);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaLeftThresh, KA_LEFT_THRESH);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaRightThresh, KA_RIGHT_THRESH);
+
     // addonOptions.turboOptions
     INIT_UNSET_PROPERTY(config.addonOptions.turboOptions, enabled, !!TURBO_ENABLED);
     INIT_UNSET_PROPERTY(config.addonOptions.turboOptions, deprecatedButtonPin, (Pin_t)-1);
@@ -1059,28 +1071,28 @@ void gpioMappingsMigrationCore(Config& config)
 
     // migrate I2C addons to use peripheral manager
     if (!peripheralOptions.blockI2C0.enabled && (
-            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 0)) || 
-            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0)) || 
+            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 0)) ||
+            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0)) ||
             (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0))
         )
     ) {
         peripheralOptions.blockI2C0.enabled = (
-            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 0)) | 
-            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0)) | 
-            (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0)) | 
+            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 0)) |
+            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0)) |
+            (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0)) |
             (!!I2C0_ENABLED)
         );
 
         // pin configuration
         peripheralOptions.blockI2C0.sda = (
-            isValidPin(config.displayOptions.deprecatedI2cSDAPin) && (config.displayOptions.deprecatedI2cBlock == 0) ? 
-            config.displayOptions.deprecatedI2cSDAPin : 
+            isValidPin(config.displayOptions.deprecatedI2cSDAPin) && (config.displayOptions.deprecatedI2cBlock == 0) ?
+            config.displayOptions.deprecatedI2cSDAPin :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSDAPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSDAPin : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSDAPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSDAPin :
                     I2C0_PIN_SDA
                 )
             )
@@ -1088,14 +1100,14 @@ void gpioMappingsMigrationCore(Config& config)
         markAddonPinIfUsed(peripheralOptions.blockI2C0.sda);
 
         peripheralOptions.blockI2C0.scl = (
-            isValidPin(config.displayOptions.deprecatedI2cSCLPin) && (config.displayOptions.deprecatedI2cBlock == 0) ? 
-            config.displayOptions.deprecatedI2cSCLPin : 
+            isValidPin(config.displayOptions.deprecatedI2cSCLPin) && (config.displayOptions.deprecatedI2cBlock == 0) ?
+            config.displayOptions.deprecatedI2cSCLPin :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSCLPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSCLPin : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSCLPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSCLPin :
                     I2C0_PIN_SCL
                 )
             )
@@ -1104,14 +1116,14 @@ void gpioMappingsMigrationCore(Config& config)
 
         // option configuration
         peripheralOptions.blockI2C0.speed = (
-            isValidPin(config.displayOptions.deprecatedI2cSpeed) && (config.displayOptions.deprecatedI2cBlock == 0) ? 
-            config.displayOptions.deprecatedI2cSpeed : 
+            isValidPin(config.displayOptions.deprecatedI2cSpeed) && (config.displayOptions.deprecatedI2cBlock == 0) ?
+            config.displayOptions.deprecatedI2cSpeed :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSpeed) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSpeed : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSpeed) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 0) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSpeed :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSpeed) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSpeed : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSpeed) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 0) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSpeed :
                     I2C0_SPEED
                 )
             )
@@ -1119,28 +1131,28 @@ void gpioMappingsMigrationCore(Config& config)
     }
 
     if (!peripheralOptions.blockI2C1.enabled && (
-            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 1)) || 
-            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1)) || 
+            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 1)) ||
+            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1)) ||
             (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1))
         )
     ) {
         peripheralOptions.blockI2C1.enabled = (
-            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 1)) | 
-            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1)) | 
-            (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1)) | 
+            (config.displayOptions.enabled && (config.displayOptions.deprecatedI2cBlock == 1)) |
+            (config.addonOptions.analogADS1219Options.enabled && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1)) |
+            (config.addonOptions.wiiOptions.enabled && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1)) |
             (!!I2C1_ENABLED)
         );
 
         // pin configuration
         peripheralOptions.blockI2C1.sda = (
-            isValidPin(config.displayOptions.deprecatedI2cSDAPin) && (config.displayOptions.deprecatedI2cBlock == 1) ? 
-            config.displayOptions.deprecatedI2cSDAPin : 
+            isValidPin(config.displayOptions.deprecatedI2cSDAPin) && (config.displayOptions.deprecatedI2cBlock == 1) ?
+            config.displayOptions.deprecatedI2cSDAPin :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSDAPin :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSDAPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSDAPin : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSDAPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSDAPin :
                     I2C1_PIN_SDA
                 )
             )
@@ -1148,14 +1160,14 @@ void gpioMappingsMigrationCore(Config& config)
         markAddonPinIfUsed(peripheralOptions.blockI2C1.sda);
 
         peripheralOptions.blockI2C1.scl = (
-            isValidPin(config.displayOptions.deprecatedI2cSCLPin) && (config.displayOptions.deprecatedI2cBlock == 1) ? 
-            config.displayOptions.deprecatedI2cSCLPin : 
+            isValidPin(config.displayOptions.deprecatedI2cSCLPin) && (config.displayOptions.deprecatedI2cBlock == 1) ?
+            config.displayOptions.deprecatedI2cSCLPin :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSCLPin :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSCLPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSCLPin : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSCLPin) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSCLPin :
                     I2C1_PIN_SCL
                 )
             )
@@ -1164,14 +1176,14 @@ void gpioMappingsMigrationCore(Config& config)
 
         // option configuration
         peripheralOptions.blockI2C1.speed = (
-            isValidPin(config.displayOptions.deprecatedI2cSpeed) && (config.displayOptions.deprecatedI2cBlock == 1) ? 
-            config.displayOptions.deprecatedI2cSpeed : 
+            isValidPin(config.displayOptions.deprecatedI2cSpeed) && (config.displayOptions.deprecatedI2cBlock == 1) ?
+            config.displayOptions.deprecatedI2cSpeed :
             (
-                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSpeed) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ? 
-                config.addonOptions.analogADS1219Options.deprecatedI2cSpeed : 
+                isValidPin(config.addonOptions.analogADS1219Options.deprecatedI2cSpeed) && (config.addonOptions.analogADS1219Options.deprecatedI2cBlock == 1) ?
+                config.addonOptions.analogADS1219Options.deprecatedI2cSpeed :
                 (
-                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSpeed) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ? 
-                    config.addonOptions.wiiOptions.deprecatedI2cSpeed : 
+                    isValidPin(config.addonOptions.wiiOptions.deprecatedI2cSpeed) && (config.addonOptions.wiiOptions.deprecatedI2cBlock == 1) ?
+                    config.addonOptions.wiiOptions.deprecatedI2cSpeed :
                     I2C1_SPEED
                 )
             )

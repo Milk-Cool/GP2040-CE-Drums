@@ -223,7 +223,7 @@ message ProfileOptions
 message DisplayOptions
 {
     optional bool enabled = 1;
-    
+
     optional int32 deprecatedI2cBlock = 2 [deprecated = true];
     optional int32 deprecatedI2cSDAPin = 3 [deprecated = true];
     optional int32 deprecatedI2cSCLPin = 4 [deprecated = true];
@@ -438,7 +438,7 @@ message ReverseOptions
 message AnalogADS1219Options
 {
     optional bool enabled = 1;
-    
+
     optional int32 deprecatedI2cBlock = 2 [deprecated = true];
     optional int32 deprecatedI2cSDAPin = 3 [deprecated = true];
     optional int32 deprecatedI2cSCLPin = 4 [deprecated = true];
@@ -455,6 +455,25 @@ message AnalogADS1256Options
     optional int32 drdyPin = 4;
     optional float avdd = 5;
     optional bool enableTriggers = 6;
+}
+
+message DrumOptions {
+    optional bool enabled = 1;
+
+    optional int32 donLeftPin = 2;
+    optional int32 donRightPin = 3;
+    optional int32 kaLeftPin = 4;
+    optional int32 kaRightPin = 5;
+
+    optional int32 donLeftThresh = 6;
+    optional int32 donRightThresh = 7;
+    optional int32 kaLeftThresh = 8;
+    optional int32 kaRightThresh = 9;
+
+    optional int32 donLeftThreshForce = 10;
+    optional int32 donRightThreshForce = 11;
+    optional int32 kaLeftThreshForce = 12;
+    optional int32 kaRightThreshForce = 13;
 }
 
 message DualDirectionalOptions
@@ -823,6 +842,7 @@ message AddonOptions
     optional DRV8833RumbleOptions drv8833RumbleOptions = 26;
     optional ReactiveLEDOptions reactiveLEDOptions = 27;
     optional GamepadUSBHostOptions gamepadUSBHostOptions = 28;
+    optional DrumOptions drumOptions = 29;
 }
 
 message MigrationHistory
