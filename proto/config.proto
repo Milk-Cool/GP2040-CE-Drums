@@ -474,6 +474,8 @@ message DrumOptions {
     optional int32 donRightThreshForce = 11;
     optional int32 kaLeftThreshForce = 12;
     optional int32 kaRightThreshForce = 13;
+
+		optional int32 switchPin = 14;
 }
 
 message DualDirectionalOptions

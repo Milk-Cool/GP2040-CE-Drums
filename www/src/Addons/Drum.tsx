@@ -60,6 +60,10 @@ export const drumScheme = {
 		.number()
 		.min(0).max(4095)
 		.label('Ka Right Threshold (Strong)'),
+	drumSwitchPin: yup
+		.number()
+		.label('Switch Pin')
+		.validatePinWhenValue('DrumEnabled'),
 };
 
 export const drumState = {
@@ -76,6 +80,7 @@ export const drumState = {
 	drumKaRightPin: -1,
 	drumKaRightThresh: 10,
 	drumKaRightThreshForce: 1000,
+	drumSwitchPin: -1,
 };
 
 // FIXME: Default values are 0 for strong thresholds, even though everything else seemingly works
@@ -251,6 +256,22 @@ const Drum = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={0}
 						max={4095}
+					/>
+				</Row>
+
+				<Row className="mb-3">
+					<FormControl
+						type="number"
+						label={t('AddonsConfig:drum-switch-pin')}
+						name="drumSwitchPin"
+						className="form-select-sm"
+						groupClassName="col-sm-3 mb-3"
+						value={values.drumSwitchPin}
+						error={errors.drumSwitchPin}
+						isInvalid={errors.drumSwitchPin}
+						onChange={handleChange}
+						min={-1}
+						max={29}
 					/>
 				</Row>
 			</div>

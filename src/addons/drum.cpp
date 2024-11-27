@@ -27,6 +27,12 @@ void DrumAddon::setup()
 	if(isValidPin(drumOptions.kaLeftPin)) adc_gpio_init(drumOptions.kaLeftPin);
 	if(isValidPin(drumOptions.kaRightPin)) adc_gpio_init(drumOptions.kaRightPin);
 
+	if(isValidPin(drumOptions.switchPin)) {
+		gpio_init(drumOptions.switchPin);
+		gpio_set_dir(drumOptions.switchPin, GPIO_IN);
+		gpio_pull_up(drumOptions.switchPin);
+	}
+
 	cfg.donLeft.pin = drumOptions.donLeftPin;
 	cfg.donLeft.thresh = drumOptions.donLeftThresh;
 	cfg.donLeft.threshForce = drumOptions.donLeftThreshForce;
@@ -42,6 +48,8 @@ void DrumAddon::setup()
 	cfg.kaRight.pin = drumOptions.kaRightPin;
 	cfg.kaRight.thresh = drumOptions.kaRightThresh;
 	cfg.kaRight.threshForce = drumOptions.kaRightThreshForce;
+
+	cfg.switchPin = drumOptions.switchPin;
 }
 
 void DrumAddon::preprocess()
@@ -52,6 +60,36 @@ void DrumAddon::process()
 {
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 
+	if(isValidPin(cfg.switchPin) && !gpio_get(cfg.switchPin)) {
+		if(isValidPin(cfg.donLeft.pin)) {
+			uint16_t readDonLeft = readPin(cfg.donLeft.pin);
+			if(readDonLeft > cfg.donLeft.threshForce)
+				gamepad->state.buttons |= GAMEPAD_MASK_S2;
+			else if(readDonLeft > cfg.donLeft.thresh)
+				gamepad->state.buttons |= GAMEPAD_MASK_B1;
+		}
+		if(isValidPin(cfg.donRight.pin)) {
+			uint16_t readDonRight = readPin(cfg.donRight.pin);
+			if(readDonRight > cfg.donRight.thresh)
+				gamepad->state.buttons |= GAMEPAD_MASK_B2;
+		}
+
+		if(isValidPin(cfg.kaLeft.pin)) {
+			uint16_t readKaLeft = readPin(cfg.kaLeft.pin);
+			if(readKaLeft > cfg.kaLeft.threshForce)
+				gamepad->state.buttons |= GAMEPAD_MASK_LEFT;
+			else if(readKaLeft > cfg.kaLeft.thresh)
+				gamepad->state.dpad |= GAMEPAD_MASK_L1;
+		}
+		if(isValidPin(cfg.kaRight.pin)) {
+			uint16_t readKaRight = readPin(cfg.kaRight.pin);
+			if(readKaRight > cfg.kaRight.threshForce)
+				gamepad->state.buttons |= GAMEPAD_MASK_RIGHT;
+			else if(readKaRight > cfg.kaRight.thresh)
+				gamepad->state.dpad |= GAMEPAD_MASK_R1;
+		}
+		return;
+	}
 	if(isValidPin(cfg.donLeft.pin)) {
 		uint16_t readDonLeft = readPin(cfg.donLeft.pin);
 		if(readDonLeft > cfg.donLeft.thresh)

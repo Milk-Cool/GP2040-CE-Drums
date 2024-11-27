@@ -39,6 +39,7 @@ export default {
 	'drum-ka-right-pin': 'Ka Right Pin',
 	'drum-ka-right-thresh': 'Ka Right Threshold',
 	'drum-ka-right-thresh-force': 'Ka Right Threshold (Strong)',
+	'drum-switch-pin': 'Mode Switch Pin',
 	'inner-deadzone-size': 'Inner Deadzone Size (%)',
 	'outer-deadzone-size': 'Outer Deadzone Size (%)',
 	'analog-auto-calibrate': 'Auto Calibration',

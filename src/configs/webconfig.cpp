@@ -1477,6 +1477,7 @@ std::string setAddonOptions()
     docToPin(drumOptions.kaRightPin, doc, "drumKaRightPin");
     docToValue(drumOptions.kaRightThresh, doc, "drumKaRightThresh");
     docToValue(drumOptions.kaRightThreshForce, doc, "drumKaRightThreshForce");
+    docToValue(drumOptions.switchPin, doc, "drumSwitchPin");
     docToValue(drumOptions.enabled, doc, "DrumEnabled");
 
     BootselButtonOptions& bootselButtonOptions = Storage::getInstance().getAddonOptions().bootselButtonOptions;
@@ -1911,6 +1912,7 @@ std::string getAddonOptions()
     writeDoc(doc, "drumKaRightPin", cleanPin(drumOptions.kaRightPin));
     writeDoc(doc, "drumKaRightThresh", drumOptions.kaRightThresh);
     writeDoc(doc, "drumKaRightThreshForce", drumOptions.kaRightThreshForce);
+    writeDoc(doc, "drumSwitchPin", drumOptions.switchPin);
     writeDoc(doc, "DrumEnabled", drumOptions.enabled);
 
     const BootselButtonOptions& bootselButtonOptions = Storage::getInstance().getAddonOptions().bootselButtonOptions;

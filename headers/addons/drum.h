@@ -51,6 +51,10 @@
 #define KA_RIGHT_THRESH_FORCE 1000
 #endif
 
+#ifndef SWITCH_PIN
+#define SWITCH_PIN -1
+#endif
+
 // IO Module Name
 #define AddonName "Taiko no Tatsujin drum"
 
@@ -64,6 +68,8 @@ typedef struct {
 		DrumArea donRight;
 		DrumArea kaLeft;
 		DrumArea kaRight;
+
+		int32_t switchPin;
 } DrumConfig;
 
 class DrumAddon : public GPAddon
