@@ -40,6 +40,7 @@ export default {
 	'drum-ka-right-thresh': 'Ka Right Threshold',
 	'drum-ka-right-thresh-force': 'Ka Right Threshold (Strong)',
 	'drum-switch-pin': 'Mode Switch Pin',
+	'drum-hid2vpad-fix': 'HID-TO-VPAD Fix (WiiU)',
 	'inner-deadzone-size': 'Inner Deadzone Size (%)',
 	'outer-deadzone-size': 'Outer Deadzone Size (%)',
 	'analog-auto-calibrate': 'Auto Calibration',

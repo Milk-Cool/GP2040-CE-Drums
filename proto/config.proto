@@ -476,6 +476,7 @@ message DrumOptions {
     optional int32 kaRightThreshForce = 13;
 
 		optional int32 switchPin = 14;
+		optional bool hid2vpadFix = 15;
 }
 
 message DualDirectionalOptions

@@ -55,6 +55,10 @@
 #define SWITCH_PIN -1
 #endif
 
+#ifndef HID2VPAD_FIX
+#define HID2VPAD_FIX 0
+#endif
+
 // IO Module Name
 #define AddonName "Taiko no Tatsujin drum"
 
@@ -70,7 +74,18 @@ typedef struct {
 		DrumArea kaRight;
 
 		int32_t switchPin;
+		bool hid2vpadFix;
 } DrumConfig;
+
+typedef struct {
+	bool a;
+	bool b;
+	bool right;
+	bool left;
+	bool l;
+	bool r;
+	bool plus;
+} PressedButtons;
 
 class DrumAddon : public GPAddon
 {

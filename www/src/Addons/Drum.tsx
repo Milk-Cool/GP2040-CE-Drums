@@ -64,6 +64,7 @@ export const drumScheme = {
 		.number()
 		.label('Switch Pin')
 		.validatePinWhenValue('DrumEnabled'),
+	drumHid2vpadFix: yup.boolean().required().label('HID-TO-VPAD Fix (WiiU)'),
 };
 
 export const drumState = {
@@ -81,6 +82,7 @@ export const drumState = {
 	drumKaRightThresh: 10,
 	drumKaRightThreshForce: 1000,
 	drumSwitchPin: -1,
+	drumHid2vpadFix: 0,
 };
 
 // FIXME: Default values are 0 for strong thresholds, even though everything else seemingly works
@@ -272,6 +274,18 @@ const Drum = ({ values, errors, handleChange, handleCheckbox }) => {
 						onChange={handleChange}
 						min={-1}
 						max={29}
+					/>
+					<FormCheck
+						label={t('AddonsConfig:drum-hid2vpad-fix')}
+						type="switch"
+						id="drumHid2vpadFix"
+						isInvalid={false}
+						checked={Boolean(values.drumHid2vpadFix)}
+						value={Boolean(values.drumHid2vpadFix)}
+						onChange={(e) => {
+							handleCheckbox('drumHid2vpadFix', values);
+							handleChange(e);
+						}}
 					/>
 				</Row>
 			</div>

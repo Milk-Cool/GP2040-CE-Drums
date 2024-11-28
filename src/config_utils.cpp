@@ -557,6 +557,7 @@ void ConfigUtils::initUnsetPropertiesWithDefaults(Config& config)
 		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaLeftThresh, KA_LEFT_THRESH);
 		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, kaRightThresh, KA_RIGHT_THRESH);
 		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, switchPin, SWITCH_PIN);
+		INIT_UNSET_PROPERTY(config.addonOptions.drumOptions, hid2vpadFix, HID2VPAD_FIX);
 
     // addonOptions.turboOptions
     INIT_UNSET_PROPERTY(config.addonOptions.turboOptions, enabled, !!TURBO_ENABLED);
