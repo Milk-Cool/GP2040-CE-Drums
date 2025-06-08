@@ -12,7 +12,7 @@ bool DrumAddon::available()
 }
 
 static uint16_t readPin(Pin_t pin_adc) {
-    adc_select_input(pin_adc);
+    adc_select_input(pin_adc - 26);
     return adc_read();
 }
 
