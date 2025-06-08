@@ -2,6 +2,7 @@
 #include "drivermanager.h"
 #include "storagemanager.h"
 #include "class/hid/hid_host.h"
+#include "drivers/ps4/PS4Driver.h"
 
 void GamepadUSBHostListener::setup() {
     _controller_host_enabled = false;
@@ -57,12 +58,18 @@ void GamepadUSBHostListener::process_ctrlr_report(uint8_t dev_addr, uint8_t cons
 
     switch(controller_pid)
     {
-        case 0x05c4: // Sony Dualshock 4 controller
-        case 0x09cc: // Sony Dualshock 4 controller
+        case DS4_ORG_PRODUCT_ID: // Sony Dualshock 4 controller
+        case DS4_PRODUCT_ID:     // Sony Dualshock 4 controller
+        case PS4_PRODUCT_ID:     // Razer Panthera
             process_ds4(report);
             break;
-        case 0x9400:// Google Stadia controller
+        case 0x9400:             // Google Stadia controller
             process_stadia(report);
+            break;
+
+        case 0x0510:             // pre-2015 Ultrakstik 360
+        case 0x0511:             // Ultrakstik 360
+            process_ultrastik360(report);
             break;
         default:
             break;
@@ -84,9 +91,9 @@ bool GamepadUSBHostListener::diff_report(dualshock4_t const* rpt1, dualshock4_t 
     bool result;
 
     // x, y, z, rz must different than 2 to be counted
-    result = diff_than_2(rpt1->GD_GamePadPointerX, rpt2->GD_GamePadPointerX) || 
+    result = diff_than_2(rpt1->GD_GamePadPointerX, rpt2->GD_GamePadPointerX) ||
             diff_than_2(rpt1->GD_GamePadPointerY , rpt2->GD_GamePadPointerY ) ||
-            diff_than_2(rpt1->GD_GamePadPointerZ, rpt2->GD_GamePadPointerZ) || 
+            diff_than_2(rpt1->GD_GamePadPointerZ, rpt2->GD_GamePadPointerZ) ||
             diff_than_2(rpt1->GD_GamePadPointerRz, rpt2->GD_GamePadPointerRz);
 
     // check the rest with mem compare
@@ -158,6 +165,7 @@ void GamepadUSBHostListener::process_stadia(uint8_t const* report) {
     _controller_host_state.rt = controller_report.SIM_GamePadAccelerator;
 
     if (controller_report.BTN_GamePadButton18 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_A2;
+    if (controller_report.BTN_GamePadButton17 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_A3;
     if (controller_report.BTN_GamePadButton11 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_S1;
     if (controller_report.BTN_GamePadButton15 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_R3;
     if (controller_report.BTN_GamePadButton14 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_L3;
@@ -180,4 +188,23 @@ void GamepadUSBHostListener::process_stadia(uint8_t const* report) {
     if (controller_report.GD_GamePadHatSwitch == 5) _controller_host_state.dpad |= GAMEPAD_MASK_DOWN | GAMEPAD_MASK_LEFT;
     if (controller_report.GD_GamePadHatSwitch == 6) _controller_host_state.dpad |= GAMEPAD_MASK_LEFT;
     if (controller_report.GD_GamePadHatSwitch == 7) _controller_host_state.dpad |= GAMEPAD_MASK_LEFT | GAMEPAD_MASK_UP;
+}
+
+void GamepadUSBHostListener::process_ultrastik360(uint8_t const* report) {
+
+    ultrastik360_t controller_report;
+
+    memcpy(&controller_report, report, sizeof(controller_report));
+
+    _controller_host_state.lx = map(controller_report.GD_GamePadPointerX, 0, 255, GAMEPAD_JOYSTICK_MIN,GAMEPAD_JOYSTICK_MAX);
+    _controller_host_state.ly = map(controller_report.GD_GamePadPointerY, 0, 255, GAMEPAD_JOYSTICK_MIN,GAMEPAD_JOYSTICK_MAX);
+
+    if (controller_report.BTN_GamePadButton1 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_B1;
+    if (controller_report.BTN_GamePadButton2 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_B2;
+    if (controller_report.BTN_GamePadButton3 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_B3;
+    if (controller_report.BTN_GamePadButton4 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_B4;
+    if (controller_report.BTN_GamePadButton5 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_L1;
+    if (controller_report.BTN_GamePadButton6 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_L2;
+    if (controller_report.BTN_GamePadButton7 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_R1;
+    if (controller_report.BTN_GamePadButton8 == 1) _controller_host_state.buttons |= GAMEPAD_MASK_R2;
 }
