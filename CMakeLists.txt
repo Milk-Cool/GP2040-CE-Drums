@@ -32,7 +32,7 @@ message("GIT_REPO_BUILD_ID is ${GIT_REPO_BUILD_ID}")
 # Uncomment the next line for an unomptimized build for debugging. Use in conjunction with the Debug build type.
 # set(PICO_DEOPTIMIZED_DEBUG 1)
 
-project(GP2040-CE LANGUAGES C CXX ASM VERSION ${CMAKE_GIT_REPO_VERSION})
+project(GP2040-CE LANGUAGES C CXX ASM VERSION 0.0.0)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
