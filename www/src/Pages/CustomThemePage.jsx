@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import Fade from 'react-bootstrap/Fade';
 import Form from 'react-bootstrap/Form';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Modal from 'react-bootstrap/Modal';
@@ -291,7 +290,7 @@ const CustomThemePage = () => {
 		async function fetchData() {
 			const data = await WebApi.getCustomTheme(setLoading);
 
-			setHasCustomTheme(data.hasCustomTheme);
+			setHasCustomTheme(Boolean(data.hasCustomTheme));
 			if (!data.customTheme['ALL'])
 				data.customTheme['ALL'] = { normal: '#000000', pressed: '#000000' };
 			if (!data.customTheme['GRADIENT NORMAL'])

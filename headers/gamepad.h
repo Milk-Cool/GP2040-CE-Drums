@@ -136,7 +136,6 @@ public:
 	void setSOCDMode(SOCDMode socdMode) { options.socdMode = socdMode; }
 	void setDpadMode(DpadMode dpadMode) { options.dpadMode = dpadMode; }
 
-	GamepadState rawState;
 	GamepadState state;
 	GamepadState turboState;
 	GamepadAuxState auxState;
@@ -188,6 +187,7 @@ public:
 	GamepadButtonMapping *mapAnalogRSXPos;
 	GamepadButtonMapping *mapAnalogRSYNeg;
 	GamepadButtonMapping *mapAnalogRSYPos;
+	GamepadButtonMapping *map48WayMode;
 
 	// gamepad specific proxy of debounced buttons --- 1 = active (inverse of the raw GPIO)
 	// see GP2040::debounceGpioGetAll for details
@@ -199,7 +199,6 @@ public:
 	inline static const SOCDMode resolveSOCDMode(const GamepadOptions& options) {
 		return (options.socdMode == SOCD_MODE_BYPASS &&
 				(options.inputMode == INPUT_MODE_PS3 ||
-				 options.inputMode == INPUT_MODE_GENERIC ||
 				options.inputMode == INPUT_MODE_SWITCH ||
 				options.inputMode == INPUT_MODE_NEOGEO ||
 				options.inputMode == INPUT_MODE_PS4)) ?
@@ -214,8 +213,10 @@ private:
 
 	GamepadOptions & options;
 	DpadMode activeDpadMode;
+	bool map48WayModeToggle;
 	const HotkeyOptions & hotkeyOptions;
 
+	HotkeyEntry hotkeys[16];
 	GamepadHotkey lastAction = HOTKEY_NONE;
 };
 
