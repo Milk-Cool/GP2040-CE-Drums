@@ -52,7 +52,7 @@ grpcio==1.47.0 \
     --hash=sha256:f89de64d9eb3478b188859214752db50c91a749479011abd99e248550371375f \
     --hash=sha256:fcd5d932842df503eb0bf60f9cc35e6fe732b51f499e78b45234e0be41b0018d
     # via grpcio-tools
-grpcio-tools==1.47.0 \
+grpcio-tools==1.71.0 \
     --hash=sha256:058060fbc5a60a1c6cc2cbb3d99f730825ba249917978d48b7d0fd8f2caf01da \
     --hash=sha256:05b495ed997a9afc9016c696ed7fcd35678a7276fe0bd8b95743a382363ad2b4 \
     --hash=sha256:0b32002ff4ae860c85feb2aca1b752eb4518e7781c5770b869e7b2dfa9d92cbe \
@@ -100,7 +100,7 @@ grpcio-tools==1.47.0 \
     --hash=sha256:f64b5378484be1d6ce59311f86174be29c8ff98d8d90f589e1c56d5acae67d3c \
     --hash=sha256:fb44ae747fd299b6513420cb6ead50491dc3691d17da48f28fcc5ebf07f47741
     # via -r extra/requirements.txt
-protobuf==3.19.5 \
+protobuf==4.25.8 \
     --hash=sha256:1867f93b06a183f87696871bb8d1e99ee71dbb69d468ce1f0cc8bf3d30f982f3 \
     --hash=sha256:3c4160b601220627f7e91154e572baf5e161a9c3f445a8242d536ee3d0b7b17c \
     --hash=sha256:4ee2af7051d3b10c8a4fe6fd1a2c69f201fea36aeee7086cf202a692e1b99ee1 \
