@@ -212,7 +212,7 @@ void DrumAddon::process()
 				pressed.r = false;
 		}
 	}
-	if(isValidPin(cfg.kaLeft.pin)) {
+	if(isValidPin(cfg.kaRight.pin)) {
 		uint16_t readKaRight = readPin(cfg.kaRight.pin);
 		if(readKaRight > cfg.kaRight.threshForce) {
 			if(!pressed.r || nofix) {
@@ -226,7 +226,7 @@ void DrumAddon::process()
 		}
 		else if(readKaRight > cfg.kaRight.thresh) {
 			if(!pressed.r || nofix) {
-				gamepad->state.buttons |= GAMEPAD_MASK_L1;
+				gamepad->state.buttons |= GAMEPAD_MASK_R1;
 				pressed.r = true;
 			}
 		}
