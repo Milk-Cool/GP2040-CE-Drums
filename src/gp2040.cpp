@@ -97,7 +97,7 @@ void GP2040::setup() {
 	addons.LoadUSBAddon(new GamepadUSBHostAddon());
 	addons.LoadAddon(new AnalogInput());
 	addons.LoadAddon(new BootselButtonAddon());
-	addons.LoadAddon(new DrumAddon(), CORE0_INPUT);
+	addons.LoadAddon(new DrumAddon());
 	addons.LoadAddon(new DualDirectionalInput());
 	addons.LoadAddon(new FocusModeAddon());
 	addons.LoadAddon(new I2CAnalog1219Input());

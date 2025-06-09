@@ -94,7 +94,9 @@ public:
     virtual bool available();
     virtual void setup();
     virtual void preprocess();
+    virtual void postprocess(bool);
     virtual void process();
+    virtual void reinit();
     virtual std::string name() { return AddonName; }
 
 private:

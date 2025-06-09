@@ -19,6 +19,9 @@ static uint16_t readPin(Pin_t pin_adc) {
 static DrumConfig cfg;
 PressedButtons pressed;
 
+void DrumAddon::postprocess(bool) {}
+void DrumAddon::reinit() {} // NO SUPPORT FOR REINIT
+
 void DrumAddon::setup()
 {
     const DrumOptions& drumOptions = Storage::getInstance().getAddonOptions().drumOptions;
