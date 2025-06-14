@@ -146,7 +146,7 @@ void DrumAddon::process()
 		uint16_t readDonLeft = readPin(cfg.donLeft.pin);
 		if(readDonLeft > cfg.donLeft.threshForce) {
 			if(!pressed.right || nofix) {
-				gamepad->state.dpad |= GAMEPAD_MASK_RIGHT;
+				gamepad->state.dpad |= GAMEPAD_MASK_UP;
 				pressed.right = true;
 			}
 			if(!pressed.a || nofix) {
@@ -156,7 +156,7 @@ void DrumAddon::process()
 		}
 		else if(readDonLeft > cfg.donLeft.thresh) {
 			if(!pressed.right || nofix) {
-				gamepad->state.dpad |= GAMEPAD_MASK_RIGHT;
+				gamepad->state.dpad |= GAMEPAD_MASK_UP;
 				pressed.right = true;
 			}
 		}
@@ -173,7 +173,7 @@ void DrumAddon::process()
 				pressed.a = true;
 			}
 			if(!pressed.right || nofix) {
-				gamepad->state.dpad |= GAMEPAD_MASK_RIGHT;
+				gamepad->state.dpad |= GAMEPAD_MASK_UP;
 				pressed.right = true;
 			}
 		}
